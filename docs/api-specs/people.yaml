@@ -1,0 +1,324 @@
+openapi: 3.1.0
+info:
+  title: People Management API
+  summary: REST APIs for managing people with roles (user, service provider, admin)
+  description: |
+    The People Management API provides endpoints to manage individuals with different roles: users, service providers, and admins. It allows creation, retrieval, updates, and deletion of people records.
+
+    ## Features
+    - List all people with optional filters (e.g., role)
+    - Retrieve, update, and delete a specific person by ID
+    - Create a new person with role-specific attributes
+
+  version: '1.0'
+
+servers:
+  - url: "http://localhost:3002"
+    description: Local Development environment
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the person.
+        first_name:
+          type: string
+          description: First name of the person.
+        last_name:
+          type: string
+          description: Last name of the person.
+        email:
+          type: string
+          description: Email address of the person.
+        phone_number:
+          type: string
+          description: Contact number of the person.
+        address:
+          type: object
+          description: Address details.
+          properties:
+            street:
+              type: string
+              description: Street name.
+            city:
+              type: string
+              description: City name.
+            state:
+              type: string
+              description: State name.
+            country:
+              type: string
+              description: Country name.
+            zip_code:
+              type: string
+              description: Postal code.
+        role_id:
+          type: string
+          description: Role ID referencing the Roles collection.
+        role_attributes:
+          type: object
+          description: Role-specific attributes.
+          properties:
+            service:
+              type: object
+              description: Attributes specific to service providers.
+              properties:
+                service_type_id:
+                  type: string
+                  description: Reference to the service type.
+                hourly_rate:
+                  type: number
+                  description: Hourly rate for the service.
+                description:
+                  type: string
+                  description: Service description.
+            permissions:
+              type: array
+              description: Permissions for admins.
+              items:
+                type: string
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the person was created.
+        last_login:
+          type: string
+          format: date-time
+          description: Timestamp of the last login.
+
+    PaginatedPeople:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            total_items:
+              type: integer
+              description: Total number of people.
+            total_pages:
+              type: integer
+              description: Total number of pages available.
+            current_page:
+              type: integer
+              description: Current page number.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code.
+        message:
+          type: string
+          description: Error message.
+
+paths:
+  /people:
+    get:
+      operationId: getPeople
+      summary: List People
+      description: Retrieve a list of all people with optional filters for role and pagination.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: role_id
+          in: query
+          schema:
+            type: string
+            description: Filter by role ID.
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            description: Page number for pagination.
+        - name: count
+          in: query
+          schema:
+            type: integer
+            default: 10
+            description: Number of records per page.
+      responses:
+        200:
+          description: Successfully retrieved people list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPeople'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      operationId: createPerson
+      summary: Create a New Person
+      description: Create a new person with optional role-specific attributes.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        201:
+          description: Person created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /people/{id}:
+    get:
+      operationId: getPersonById
+      summary: Retrieve Person by ID
+      description: Retrieve a specific person by their unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Unique identifier of the person.
+      responses:
+        200:
+          description: Successfully retrieved the person.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Person not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      operationId: updatePersonById
+      summary: Update Person by ID
+      description: Update an existing person’s details by their unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Unique identifier of the person.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        200:
+          description: Person updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Person not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      operationId: deletePersonById
+      summary: Delete Person by ID
+      description: Delete a specific person by their unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Unique identifier of the person.
+      responses:
+        204:
+          description: Person deleted successfully.
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Person not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
