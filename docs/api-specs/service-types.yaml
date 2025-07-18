@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: Service Types API
+  version: 1.0.0
+  description: API to manage service types such as carpenters, plumbers, and more.
+paths:
+  /service-types:
+    get:
+      summary: Get all service types
+      operationId: getServiceTypes
+      responses:
+        '200':
+          description: A list of service types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceType'
+    post:
+      summary: Create a new service type
+      operationId: createServiceType
+      requestBody:
+        description: Service type object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceTypeInput'
+      responses:
+        '201':
+          description: Service type created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceType'
+  /service-types/{id}:
+    get:
+      summary: Get a service type by ID
+      operationId: getServiceTypeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the service type
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single service type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceType'
+        '404':
+          description: Service type not found
+    put:
+      summary: Update a service type by ID
+      operationId: updateServiceType
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the service type to update
+          schema:
+            type: string
+      requestBody:
+        description: Updated service type object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceTypeInput'
+      responses:
+        '200':
+          description: Service type updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceType'
+        '404':
+          description: Service type not found
+    delete:
+      summary: Delete a service type by ID
+      operationId: deleteServiceType
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the service type to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Service type deleted successfully
+        '404':
+          description: Service type not found
+components:
+  schemas:
+    ServiceType:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the service type
+        role_type:
+          type: string
+          description: Role of the service provider (e.g., Carpenter, Plumber)
+        description:
+          type: string
+          description: Detailed description of the role
+    ServiceTypeInput:
+      type: object
+      required:
+        - role_type
+        - description
+      properties:
+        role_type:
+          type: string
+          description: Role of the service provider (e.g., Carpenter, Plumber)
+        description:
+          type: string
+          description: Detailed description of the role
