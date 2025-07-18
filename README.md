@@ -12,17 +12,6 @@ FixFinder is a fully web-based platform that connects end users with local servi
 
 FixFinder aims to streamline service discovery and booking through a user-friendly interface. End users can effortlessly search for nearby service providers based on their specific requirements, view detailed provider profiles, specify service hours, and manage bookings through a personalized dashboard. Service providers, on the other hand, can efficiently manage their offerings, set competitive pricing, and leverage a dedicated dashboard to monitor their performance, bookings, and revenue insights. FixFinder bridges the gap between users and providers, ensuring a seamless experience for both parties.
 
-## Team Members
-
-- **Srikanth Lakshminarayan** - lakshminarayan.s@northeastern.edu
-- **Neeha Girja** - girja.n@northeastern.edu
-- **Aayush Kumar** - kumar.aayus@northeastern.edu
-- **Varun Singh** - singh.varun3@northeastern.edu
-
----
-
-Presentation Link : https://northeastern-my.sharepoint.com/:v:/g/personal/kumar_aayus_northeastern_edu/Eedyj8PYjXhEkzL32QaRPlMBGP7LU5m0b_vvSbXJ6xoTrg?e=t3TRnj
-
 ## Tech Stack
 
 | Technology                                                                                                                      | Description                                              |
@@ -60,7 +49,6 @@ The project repository will include two primary directories:
 Other Contents:
 
 - **Presentation PPT**: Project Title, Project Description, Team member names, Screenshots from the project
-- **Video**: 10 min presentation video link
 
 ---
 
