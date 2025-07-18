@@ -46,12 +46,6 @@ The project repository will include two primary directories:
 1. **app**: Frontend code (React, Redux, SCSS).
 2. **service**: Directory for REST API Service | Server-side code with configurations (Node.js, Express.js, MongoDB).
 
-Other Contents:
-
-- **Presentation PPT**: Project Title, Project Description, Team member names, Screenshots from the project
-
----
-
 ## Installation Guide
 
 1. Clone the repository
