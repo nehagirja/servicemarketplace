@@ -1,0 +1,271 @@
+openapi: 3.1.0
+info:
+  title: Review API
+  summary: API for managing reviews of service providers by users.
+  description: |
+    The Review API allows users to submit reviews for service providers based on completed bookings. 
+    Each review includes a rating, comment, and links to the user, service provider, and booking details.
+
+    ## Features
+    - Submit a review for a completed booking.
+    - Fetch reviews for a service provider.
+    - Aggregate reviews (e.g., average rating) for a service provider.
+    - Delete or update existing reviews.
+
+  version: "1.0"
+
+servers:
+  - url: "http://localhost:3002"
+    description: Local Development environment
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Review:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the review document.
+          example: "64f5a6c7d8e9f1b2c3d4e5f6"
+        bookingId:
+          type: string
+          description: Reference to the booking associated with the review.
+          example: "64e3f4b2c1d2e3f4b5a6c7d8"
+        userId:
+          type: string
+          description: Reference to the user who left the review.
+          example: "64c1d8f9e8b3d4e2e1c1a2b3"
+        serviceProviderId:
+          type: string
+          description: Reference to the service provider being reviewed.
+          example: "64bfe1e2d8f9e8b3d4e2e1c1"
+        rating:
+          type: integer
+          description: Rating provided by the user (1 to 5).
+          example: 5
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+          description: Optional comment about the service.
+          example: "The service was excellent! Quick response and professional work."
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the review was created.
+          example: "2024-11-22T12:00:00Z"
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code.
+        message:
+          type: string
+          description: Error message.
+
+paths:
+  /reviews:
+    get:
+      operationId: getReviews
+      summary: List Reviews
+      description: Retrieve all reviews, optionally filtered by `serviceProviderId` or `userId`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: serviceProviderId
+          in: query
+          schema:
+            type: string
+          description: Filter reviews by service provider.
+        - name: userId
+          in: query
+          schema:
+            type: string
+          description: Filter reviews by user.
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            description: Page number for pagination.
+        - name: count
+          in: query
+          schema:
+            type: integer
+            default: 10
+            description: Number of records per page.
+      responses:
+        200:
+          description: Successfully retrieved reviews.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      operationId: createReview
+      summary: Submit a Review
+      description: Submit a review for a completed booking.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        201:
+          description: Review created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        400:
+          description: Bad Request - Invalid input or booking not completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reviews/{id}:
+    get:
+      operationId: getReviewById
+      summary: Retrieve a Review by ID
+      description: Fetch a specific review by its unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: The unique ID of the review.
+      responses:
+        200:
+          description: Successfully retrieved the review.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        404:
+          description: Review not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      operationId: updateReviewById
+      summary: Update a Review
+      description: Update an existing review by its unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: The unique ID of the review.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        200:
+          description: Review updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        400:
+          description: Bad Request - Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Review not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      operationId: deleteReviewById
+      summary: Delete a Review
+      description: Delete an existing review by its unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: The unique ID of the review.
+      responses:
+        204:
+          description: Review deleted successfully.
+        404:
+          description: Review not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
