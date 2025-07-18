@@ -1,0 +1,283 @@
+openapi: 3.1.0
+info:
+  title: Availability Management API
+  summary: REST APIs for managing availability slots for service providers
+  description: |
+    The Availability Management API provides endpoints to create, retrieve, update, and delete availability slots for service providers. Each slot represents a time range during which a provider is available for services on a specific day of the week. This API facilitates efficient scheduling by allowing users to manage provider availability based on day, start time, and duration.
+
+    ## Features
+    - List all availability slots
+    - Fetch, update, and delete availability by service provider ID
+    - Create a new availability slot for a provider
+    - Retrieve, update, and delete specific availability slots
+
+  version: '1.0'
+
+servers:
+  - url: "http://localhost:3002"
+    description: Local Development environment
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Availability:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the availability slot.
+        service_provider_id:
+          type: integer
+          description: Unique identifier of the service provider.
+        day_of_week:
+          type: integer
+          description: Day of the week when the provider is available (0 = Sunday, 6 = Saturday).
+          example: 1
+        start_time:
+          type: string
+          format: time
+          description: Start time of availability.
+          example: "12:00"
+        NumberOfHours:
+          type: string
+          format: time
+          description: Duration of availability.
+          example: "05:00"
+        Availablility:
+          type: boolean
+          description: Indicates whether the provider is available on the day.
+          example: false
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+paths:
+  /availability:
+    get:
+      operationId: getAvailability
+      summary: List Availability Slots
+      description: Retrieve a list of all availability slots for service providers, with optional filters for `service_provider_id`, `day_of_week`, `start_time`, `NumberOfHours`, and `Availability`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: service_provider_id
+          in: query
+          schema:
+            type: integer
+            description: Filter by the service provider ID.
+        - name: day_of_week
+          in: query
+          schema:
+            type: integer
+            description: Filter by day of the week (0 = Sunday, 6 = Saturday).
+        - name: start_time
+          in: query
+          schema:
+            type: string
+            format: time
+            description: Filter by start time of availability (e.g., "12:00").
+        - name: NumberOfHours
+          in: query
+          schema:
+            type: string
+            format: time
+            description: Filter by duration of availability (e.g., "05:00").
+        - name: Availability
+          in: query
+          schema:
+            type: boolean
+            description: Filter by availability status (true for available, false for unavailable).
+      responses:
+        200:
+          description: Successfully retrieved availability slots.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Availability'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: createAvailability
+      summary: Create Availability Slot
+      description: Create a new availability slot for a service provider.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Availability'
+      responses:
+        201:
+          description: Availability slot created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Availability'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /availability/{id}:
+    get:
+      operationId: getAvailabilitySlot
+      summary: Retrieve Availability Slot by ID
+      description: Retrieve a specific availability slot by its unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved the availability slot.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Availability'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: updateAvailabilityById
+      summary: Update Availability Slot by ID
+      description: Update an existing availability slot for a service provider by ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Availability'
+      responses:
+        200:
+          description: Availability slot updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Availability'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: deleteAvailabilityById
+      summary: Delete Availability Slot by ID
+      description: Delete an availability slot by its unique ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Availability slot deleted successfully.
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /availability/service-provider/{service_provider_id}:
+    get:
+      operationId: getAvailabilityByServiceProvider
+      summary: Retrieve Availability Slots by Service Provider ID
+      description: Retrieve all availability slots for a specific service provider by `service_provider_id`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: service_provider_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved availability slots for the specified service provider.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Availability'
+        401:
+          description: Unauthorized - Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
