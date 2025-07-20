@@ -1,0 +1,12 @@
+{
+    "users":"/users",
+    "service":"/service",
+    "availability":"/availability",
+    "people":"/people",
+    "booking":"/booking",
+    "serviceproviders": "/service-providers",
+    "reviews":"/reviews",
+    "auth":"/auth",
+    "servicetypes": "/service-types",
+    "payment":"/payment"
+}
