@@ -23,7 +23,7 @@ export const getAllBooking = async (request, response) => {
       const count = parseInt(request.query.count) || 10;
       const serviceProviderId = request.query.service_provider_id; // Get service_provider_id from query params
       const user_id = request.query.user_id;
-      // Create a filter object
+     
       const filters = {};
       if (serviceProviderId) {
         filters.service_provider_id = serviceProviderId; // Add service_provider_id to filters
@@ -31,22 +31,9 @@ export const getAllBooking = async (request, response) => {
       if(user_id){
         filters.user_id = user_id;
       }
-      
-
-      // const serviceRes = await bookingService.fetchAllBookings(page, count, filters);
-      // console.log("ServiceResponse : " + JSON.stringify(serviceRes));
-      // console.log("--------------------");
-
-      // const bookings = serviceRes.bookings;
-      // console.log("Bookings : " + JSON.stringify(bookings));
-      // console.log("--------------------");
 
       const { bookings, metadata } = await bookingService.fetchAllBookings(page, count, filters);
-      // console.log("Bookings : " + JSON.stringify(bookings));
-      // console.log("Metadata : " + JSON.stringify(metadata));
-      
       const totalRevenue = bookings.reduce((sum, booking) => sum + booking.total_amount, 0);
-      // console.log("Total Revenue : " + totalRevenue);
       const completedBookings = metadata.completed;
       const pendingAndConfirmedBooking = metadata.pendingAndConfirmed;
 
@@ -108,11 +95,7 @@ export const getBookingById = async (request, response) => {
           UserData,
       };
 
-        // const ServiceProviderData = await UserService.findUserById(booking.service_provider_id);
-        // console.log("ServiceProviderData : " + JSON.stringify(ServiceProviderData));
-
-        console.log("Booking : " + JSON.stringify(booking));
-        
+        console.log("Booking : " + JSON.stringify(booking));  
         setSuccess(bookingWithUserDetails,null, response);
     }
     catch (error) {
