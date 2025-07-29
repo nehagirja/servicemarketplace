@@ -1,34 +1,35 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { useNavigate } from 'react-router-dom';
-import Menu from '@mui/material/Menu';
+import React, { useState } from 'react';
+import { AppBar, Box, Toolbar, IconButton, Typography, Button, Menu, MenuItem, Avatar, Tooltip, Container } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import PersonIcon from '@mui/icons-material/Person';
-import routes from '../../constants/routes.json';
+import { useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from '../../utils/languageSwitcher.tsx';
+import appLogo from '../../assets/logo.png';
+import routes from '../../constants/routes.json';
 
-const pages = ['Services', 'Bookings', 'Profile'];
+const pages = [
+  { name: 'Services', route: routes.SERVICES },
+  { name: 'Bookings', route: routes.BOOKINGS },
+  { name: 'Profile', route: routes.PROFILE },
+];
 const settings = ['Profile', 'Logout'];
 
-
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const navigate = useNavigate(); // Initialize the navigate hook
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Retrieve user info from sessionStorage/localStorage
+  const firstname = sessionStorage.getItem('firstName') || 'User';
+  const lastname = sessionStorage.getItem('lastName') || '';
+
+  // Generate initials from firstname and lastname
+  const userInitials = `${firstname[0] || ''}${lastname[0] || ''}`.toUpperCase();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -42,42 +43,61 @@ function ResponsiveAppBar() {
   };
 
   const handleLogout = () => {
-    // Remove items from localStorage and sessionStorage
-    localStorage.removeItem("AUTH_ACCESS_TOKEN");
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("role");
-    sessionStorage.removeItem("id");
-
-    // Navigate to the login page
+    localStorage.removeItem('AUTH_ACCESS_TOKEN');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('firstname');
+    sessionStorage.removeItem('lastname');
+    sessionStorage.removeItem('id');
     navigate(routes.LOGIN, { replace: true });
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" sx={{ backgroundColor: '#283593' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            FixFinder
-          </Typography>
+          {/* Logo */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 ,cursor:'pointer' }}>
+            <img
+              src={appLogo}
+              alt="App Logo"
+              style={{ height: '70px', cursor: 'pointer' }}
+              onClick={() => navigate(routes.CUSTOMER_HOME)}
+            />
+          </Box>
+
+          {/* Desktop Menu */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
+            {pages.map((page) => (
+              <Button
+                key={page.name}
+                onClick={() => {
+                  navigate(page.route);
+                  handleCloseNavMenu();
+                }}
+                sx={{
+                  my: 2,
+                  mx: 1,
+                  color: location.pathname === page.route ? '#FFEB3B' : 'white',
+                  display: 'block',
+                  fontWeight: location.pathname === page.route ? 'bold' : 'normal',
+                  textTransform: 'none',
+                  '&:hover': {
+                    color: '#FFEB3B',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  },
+                }}
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Box>
+
+          {/* Mobile Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="navigation menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -85,6 +105,14 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', mr: 2, cursor:'pointer' }}>
+              <img
+                src={appLogo}
+                alt="App Logo"
+                style={{ height: '70px', cursor: 'pointer' }}
+                onClick={() => navigate(routes.CUSTOMER_HOME)}
+              />
+            </Box>
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -102,49 +130,34 @@ function ResponsiveAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem
+                  key={page.name}
+                  onClick={() => {
+                    navigate(page.route);
+                    handleCloseNavMenu();
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      textAlign: 'center',
+                      fontWeight: location.pathname === page.route ? 'bold' : 'normal',
+                    }}
+                  >
+                    {page.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
+
+          {/* Language Switcher */}
           <LanguageSwitcher />
-          <Box sx={{ flexGrow: 0, marginLeft:'20px'}}>
-            <Tooltip title="Open Profile">
+
+          {/* User Profile */}
+          <Box sx={{ flexGrow: 0, marginLeft: '20px' }}>
+            <Tooltip title={`${firstname} ${lastname}`}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Person">
-                  <PersonIcon />
-                </Avatar>
+                <Avatar sx={{ size: '35px' }} alt={`${firstname} ${lastname}`}>{userInitials}</Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -164,13 +177,13 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) =>
-                setting === "Logout" ? (
+                setting === 'Logout' ? (
                   <MenuItem key={setting} onClick={handleLogout}>
-                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                    <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ) : (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                    <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 )
               )}
@@ -181,4 +194,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
