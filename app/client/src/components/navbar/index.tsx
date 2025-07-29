@@ -57,12 +57,12 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 ,cursor:'pointer' }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 ,cursor:'pointer' }} onClick={() => navigate(routes.CUSTOMER_HOME)}>
             <img
               src={appLogo}
               alt="App Logo"
               style={{ height: '70px', cursor: 'pointer' }}
-              onClick={() => navigate(routes.CUSTOMER_HOME)}
+              
             />
           </Box>
 
@@ -105,12 +105,11 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
-            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', mr: 2, cursor:'pointer' }}>
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', mr: 2, cursor:'pointer' }}  onClick={() => navigate(routes.CUSTOMER_HOME)}>
               <img
                 src={appLogo}
                 alt="App Logo"
                 style={{ height: '70px', cursor: 'pointer' }}
-                onClick={() => navigate(routes.CUSTOMER_HOME)}
               />
             </Box>
             <Menu
