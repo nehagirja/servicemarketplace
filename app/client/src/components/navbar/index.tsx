@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Button, Menu, MenuItem, Avatar, Tooltip, Container } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from '../../utils/languageSwitcher.tsx';
 import appLogo from '../../assets/logo.png';
 import routes from '../../constants/routes.json';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 const pages = [
   { name: 'Services', route: routes.SERVICES },
