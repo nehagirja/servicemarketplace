@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import PersonIcon from '@mui/icons-material/Person';
 import routes from '../../constants/routes.json';
+import LanguageSwitcher from '../../utils/languageSwitcher.tsx';
 
 const pages = ['Services', 'Bookings', 'Profile'];
 const settings = ['Profile', 'Logout'];
@@ -137,7 +138,8 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
+          <LanguageSwitcher />
+          <Box sx={{ flexGrow: 0, marginLeft:'20px'}}>
             <Tooltip title="Open Profile">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Person">
