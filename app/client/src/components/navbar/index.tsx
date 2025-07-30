@@ -115,7 +115,7 @@ function ResponsiveAppBar() {
 
           {/* Desktop Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
-            {role=='customer' ? pages.map((page) => (
+            {role?.toLowerCase()=='customer' ? pages.map((page) => (
               <Button
                 key={page.name}
                 onClick={() => {
