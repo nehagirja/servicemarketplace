@@ -49,11 +49,12 @@ function ResponsiveAppBar() {
 
   const pages = [
     { name: t('Services'), route: routes.SERVICES },
-    { name: t('Bookings'), route: routes.BOOKINGS },
+    { name: t('Bookings'), route: routes.BOOKING_HISTORY },
     { name: t('Profile'), route: routes.PROFILE },
   ];
 
   const pagesServiceProvider = [
+    { name: t('Dashboard'), route: routes.SERVICE_PROVIDER_DASHBOARD },
     { name: t('Profile'), route: routes.PROFILE },
   ];
 
@@ -86,7 +87,14 @@ function ResponsiveAppBar() {
     navigate(routes.LOGIN, { replace: true });
   };
 
-  
+  const navigateHome=()=>{
+    if(role?.toLowerCase()==='customer'){
+      navigate(routes.CUSTOMER_HOME);
+    }else{
+      navigate(routes.SERVICE_PROVIDER_DASHBOARD);
+    }
+  };
+
   const handleOnProfileClick = () => {
     navigate(routes.PROFILE);
   };
@@ -96,7 +104,7 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2, cursor: 'pointer' }} onClick={() => navigate(routes.CUSTOMER_HOME)}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2, cursor: 'pointer' }} onClick={() => navigateHome()}>
             <img
               src={appLogo}
               alt="App Logo"
