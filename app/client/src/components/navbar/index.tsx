@@ -18,8 +18,30 @@ const settings = ['Profile', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+  const toggleFullscreen = async () => {
+    try {
+      if (isFullscreen) {
+        await document.exitFullscreen();
+      } else {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch (error) {
+      console.error('Error toggling fullscreen mode:', error);
+    }
+  };
 
   // Retrieve user info from sessionStorage/localStorage
   const firstname = sessionStorage.getItem('firstName') || 'User';
@@ -151,6 +173,10 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
+            {/* Fullscreen Toggle */}
+            <IconButton color="inherit" onClick={toggleFullscreen}>
+            {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+          </IconButton>
           {/* Language Switcher */}
           <LanguageSwitcher />
 
