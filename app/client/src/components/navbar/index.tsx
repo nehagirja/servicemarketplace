@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Button, Menu, MenuItem, Avatar, Tooltip, Container } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Button, Menu, MenuItem, Avatar, Container } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from '../../utils/languageSwitcher.tsx';
@@ -81,12 +82,12 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 ,cursor:'pointer' }} onClick={() => navigate(routes.CUSTOMER_HOME)}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2, cursor: 'pointer' }} onClick={() => navigate(routes.CUSTOMER_HOME)}>
             <img
               src={appLogo}
               alt="App Logo"
               style={{ height: '70px', cursor: 'pointer' }}
-              
+
             />
           </Box>
 
@@ -129,7 +130,7 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
-            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', mr: 2, cursor:'pointer' }}  onClick={() => navigate(routes.CUSTOMER_HOME)}>
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', mr: 2, cursor: 'pointer' }} onClick={() => navigate(routes.CUSTOMER_HOME)}>
               <img
                 src={appLogo}
                 alt="App Logo"
@@ -173,10 +174,12 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
-            {/* Fullscreen Toggle */}
-            <IconButton color="inherit" onClick={toggleFullscreen}>
-            {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-          </IconButton>
+          {/* Fullscreen Toggle */}
+          <Tooltip title={isFullscreen?"Restore Down":"Maximize"} placement="bottom">
+            <IconButton sx={{ padding: 0 }} color="inherit" onClick={toggleFullscreen}>
+              {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+            </IconButton>
+          </Tooltip>
           {/* Language Switcher */}
           <LanguageSwitcher />
 
