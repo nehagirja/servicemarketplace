@@ -45,10 +45,15 @@ function ResponsiveAppBar() {
   // Retrieve user info from sessionStorage/localStorage
   const firstname = sessionStorage.getItem('firstName') || 'User';
   const lastname = sessionStorage.getItem('lastName') || '';
+  const role = sessionStorage.getItem('role') || '';
 
   const pages = [
     { name: t('Services'), route: routes.SERVICES },
     { name: t('Bookings'), route: routes.BOOKINGS },
+    { name: t('Profile'), route: routes.PROFILE },
+  ];
+
+  const pagesServiceProvider = [
     { name: t('Profile'), route: routes.PROFILE },
   ];
 
@@ -81,6 +86,11 @@ function ResponsiveAppBar() {
     navigate(routes.LOGIN, { replace: true });
   };
 
+  
+  const handleOnProfileClick = () => {
+    navigate(routes.PROFILE);
+  };
+
   return (
     <AppBar position="sticky" sx={{ backgroundColor: '#09285c' }}>
       <Container maxWidth="xl">
@@ -97,7 +107,30 @@ function ResponsiveAppBar() {
 
           {/* Desktop Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
-            {pages.map((page) => (
+            {role=='customer' ? pages.map((page) => (
+              <Button
+                key={page.name}
+                onClick={() => {
+                  navigate(page.route);
+                  handleCloseNavMenu();
+                }}
+                sx={{
+                  my: 2,
+                  mx: 1,
+                  color: location.pathname === page.route ? '#FFEB3B' : 'white',
+                  display: 'block',
+                  fontWeight: location.pathname === page.route ? 'bold' : 'normal',
+                  textTransform: 'none',
+                  '&:hover': {
+                    color: '#FFEB3B',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  },
+                }}
+              >
+                {page.name}
+              </Button>
+            )):
+            pagesServiceProvider.map((page) => (
               <Button
                 key={page.name}
                 onClick={() => {
@@ -216,7 +249,7 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ) : (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting} onClick={handleOnProfileClick}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 )
