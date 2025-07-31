@@ -1,0 +1,38 @@
+
+.active {
+	filter: invert(89%) sepia(8%) saturate(4313%) hue-rotate(193deg) brightness(260%) contrast(60%);
+	background-color: none;
+}
+
+.icon {
+	background-color: none !important;
+	cursor: pointer;
+}
+
+.activeNavIcon {
+	/* filter: invert(67%) sepia(30%) saturate(551%) hue-rotate(198deg) brightness(102%) contrast(104%); */
+	background-color: none;
+}
+
+.inactive {
+	/* filter: invert(62%) sepia(12%) saturate(408%) hue-rotate(202deg) brightness(85%) contrast(89%); */
+	background-color: none;
+}
+
+@keyframes rotate {
+	from {
+		transform: rotateZ(-360deg);
+	}
+	to {
+		transform: rotateZ(360deg);
+	}
+}
+
+.circleRunningStatus {
+	animation: rotate 7s linear;
+	animation-iteration-count: infinite;
+}
+
+img {
+	pointer-events: none;
+}
