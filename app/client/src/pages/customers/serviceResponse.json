@@ -1,0 +1,89 @@
+{
+    "message": "Success",
+    "data": [
+        {
+            "_id": "6745458e3498630de76dcf9d",
+            "role_type": "Cleaner",
+            "description": "Sweeping",
+            "__v": 0
+        },
+        {
+            "_id": "6745594953bba6bec5eff9c7",
+            "role_type": "Electrician",
+            "description": "Handles electrical repairs, installations, and maintenance work.",
+            "__v": 0
+        },
+        {
+            "_id": "6745595453bba6bec5eff9ca",
+            "role_type": "Plumber",
+            "description": "Provides services for fixing leaks, unclogging drains, and other plumbing-related tasks.",
+            "__v": 0
+        },
+        {
+            "_id": "6745595f53bba6bec5eff9cd",
+            "role_type": "Gardener",
+            "description": "Takes care of lawn mowing, planting, pruning, and garden maintenance.",
+            "__v": 0
+        },
+        {
+            "_id": "6745596c53bba6bec5eff9d0",
+            "role_type": "Mover",
+            "description": "Helps with packing, moving, and setting up furniture and belongings.",
+            "__v": 0
+        },
+        {
+            "_id": "6745598353bba6bec5eff9d3",
+            "role_type": "Heavy Lifting & Loading",
+            "description": "Assists in moving and securely loading heavy items ensuring safety and proper handling.",
+            "__v": 0
+        },
+        {
+            "_id": "6745598e53bba6bec5eff9d6",
+            "role_type": "IT Support Specialist",
+            "description": "Provides technical assistance and troubleshooting for computers and networks.",
+            "__v": 0
+        },
+        {
+            "_id": "6745599d53bba6bec5eff9d9",
+            "role_type": "Pet Sitter",
+            "description": "Takes care of pets while their owners are away.",
+            "__v": 0
+        },
+        {
+            "_id": "674559aa53bba6bec5eff9dc",
+            "role_type": "Driver",
+            "description": "Provides transport services for people or goods.",
+            "__v": 0
+        },
+        {
+            "_id": "674559b353bba6bec5eff9df",
+            "role_type": "Window Washer",
+            "description": "Cleans windows for residential or commercial buildings.",
+            "__v": 0
+        },
+        {
+            "_id": "674559bc53bba6bec5eff9e2",
+            "role_type": "Locksmith",
+            "description": "Specializes in unlocking doors, repairing locks, and installing security systems.",
+            "__v": 0
+        },
+        {
+            "_id": "674559f353bba6bec5eff9e5",
+            "role_type": "Home Organizer",
+            "description": "Helps declutter and organize spaces in homes or offices.",
+            "__v": 0
+        },
+        {
+            "_id": "67455aee53bba6bec5eff9ea",
+            "role_type": "Painter",
+            "description": "Specializes in painting interiors and exteriors of buildings.",
+            "__v": 0
+        },
+        {
+            "_id": "67455b2a53bba6bec5eff9ed",
+            "role_type": "Tutor",
+            "description": "Provides educational assistance and guidance in specific subjects.",
+            "__v": 0
+        }
+    ]
+}
