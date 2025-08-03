@@ -6,7 +6,6 @@ import {
     Grid,
     Typography,
 } from "@mui/material";
-import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/button/index';
 import Textfield from '../../components/textfield';
@@ -71,15 +70,9 @@ const SignupPage: React.FC = () => {
             getUserData().then((res) => {
                 sessionStorage.setItem("email", res.data.user.email);
                 sessionStorage.setItem("role", res.data.user.role);
-                sessionStorage.setItem("firstName", res.data.user.firstName);
-                sessionStorage.setItem("lastName", res.data.user.lastName);
                 sessionStorage.setItem("id", res.data.user._id);
-                if (res.data.user.role?.toLowerCase() === 'customer') {
-                    navigate(routes.CUSTOMER_HOME, { replace: true });
-                } else {
-                    navigate(routes.SERVICE_PROVIDER_DASHBOARD, { replace: true });
-                }
-            });
+                navigate(routes.CUSTOMER_HOME, { replace: true });
+            });            
         }
     }, []);
 
@@ -173,8 +166,8 @@ const SignupPage: React.FC = () => {
 const Register: React.FC = () => {
     const loginContext = useContext(LoginContext);
     const { email, setEmail, firstName, setFirstName, lastName, setLastName, setOpenSnackbar, setSnackbarMessage, setRegisterMode, mode, setMode } = loginContext;
-    // const navigate = useNavigate();
-    const { t } = useTranslation();
+    const navigate = useNavigate();
+
     const validateEmail = (email: string): boolean => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
@@ -200,6 +193,7 @@ const Register: React.FC = () => {
             }
 
             const response = mode == 'customer' ? await RegisterCustomerAPI(bodyParameters) : await RegisterPartnersAPI(bodyParameters);
+            console.log("Registration response:", response);
             if (response.status === 201) {
                 setOpenSnackbar(true);
                 setSnackbarMessage('Registration successful! Please sign in with your email');
@@ -208,6 +202,7 @@ const Register: React.FC = () => {
         } catch (error: any) {
             console.log("Registration response:", error);
             setOpenSnackbar(true);
+            //   console.log("Error: ", error.response.data.error);
             setSnackbarMessage(error?.response?.data?.error || 'Registration failed');
 
         }
@@ -215,40 +210,38 @@ const Register: React.FC = () => {
 
     React.useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Enter') {
-                handleRegister();
-            }
+          if (event.key === 'Enter') {
+            handleRegister();
+          }
         };
-
+    
         // Attach the event listener
         window.addEventListener('keydown', handleKeyDown);
-
+    
         // Cleanup the event listener on component unmount
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+          window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [handleRegister]);
-    //     // Get the current URL
-    //     const url = new URL(window.location.href);
+      }, [handleRegister]);
 
-    //     // Extract the `token` parameter
-    //     const token = url.searchParams.get("token");
+    React.useEffect(() => {
+        // Get the current URL
+        const url = new URL(window.location.href);
 
-    //     if (token) {
-    //         // Store the token in localStorage
-    //         localStorage.setItem("AUTH_ACCESS_TOKEN", token);
+        // Extract the `token` parameter
+        const token = url.searchParams.get("token");
 
-    //         // Remove the token from the URL
-    //         url.searchParams.delete("token");
-    //         window.history.replaceState({}, "", url.toString());
-    //         if (mode === 'customer') {
-    //             navigate(routes.CUSTOMER_HOME, { replace: true });
-    //         } else {
-    //             navigate(routes.SERVICE_PROVIDER_DASHBOARD, { replace: true });
-    //         }
-    //         console.log("Token stored and removed from URL");
-    //     }
-    // }, []);
+        if (token) {
+            // Store the token in localStorage
+            localStorage.setItem("AUTH_ACCESS_TOKEN", token);
+
+            // Remove the token from the URL
+            url.searchParams.delete("token");
+            window.history.replaceState({}, "", url.toString());
+            navigate(routes.CUSTOMER_HOME, { replace: true });
+            console.log("Token stored and removed from URL");
+        }
+    }, []);
 
     return (
         <React.Fragment>
@@ -260,10 +253,10 @@ const Register: React.FC = () => {
                 }}
             >
                 <Typography variant="h4" fontWeight="bold" gutterBottom>
-                    {t('Welcome!')}
+                    Welcome!
                 </Typography>
                 <Typography color="textSecondary" sx={{ mb: 3 }}>
-                    {t('Create your account')}
+                    Create your account
                 </Typography>
 
                 <Box style={{
@@ -329,7 +322,7 @@ const Register: React.FC = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
-                                    variant="h5"
+                                    variant="h2"
                                     sx={{
                                         height: '32px',
                                         '@media (max-width: 430px)': {
@@ -370,7 +363,7 @@ const Register: React.FC = () => {
                             display="flex"
                             alignItems="center"
                             justifyContent="flex-end"
-                            variant="h5"
+                            variant="h2"
                             sx={{
                                 height: '32px',
                                 '@media (max-width: 430px)': {
@@ -417,7 +410,7 @@ const Login: React.FC = () => {
     const loginContext = useContext(LoginContext);
     const { email, setEmail, setOpenSnackbar, setSnackbarMessage, setRegisterMode, setLastName, setFirstName, mode, setMode } = loginContext;
     const navigate = useNavigate();
-    const [loginRequestSent, setLoginRequestSent] = useState(false);
+
     window.onpopstate = () => {
         setRegisterMode('login');
     };
@@ -440,10 +433,10 @@ const Login: React.FC = () => {
         }
         try {
             const response = await LoginApi(email);
-            setLoginRequestSent(true);
             if (response.status === 200) {
                 setOpenSnackbar(true);
                 setSnackbarMessage('A login link has been sent to your registered email address. Please check your inbox.');
+                console.log("Login successful:", response);
             }
         } catch (err: any) {
             setOpenSnackbar(true);
@@ -453,19 +446,19 @@ const Login: React.FC = () => {
 
     React.useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Enter') {
-                handleEmailSignIn();
-            }
+          if (event.key === 'Enter') {
+            handleEmailSignIn();
+          }
         };
-
+    
         // Attach the event listener
         window.addEventListener('keydown', handleKeyDown);
-
+    
         // Cleanup the event listener on component unmount
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+          window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [handleEmailSignIn]);
+      }, [handleEmailSignIn]);
 
     React.useEffect(() => {
         // Get the current URL
@@ -476,25 +469,12 @@ const Login: React.FC = () => {
 
         if (token) {
             // Store the token in localStorage
-            
             localStorage.setItem("AUTH_ACCESS_TOKEN", token);
-            
+
+            // Remove the token from the URL
             url.searchParams.delete("token");
-            
             window.history.replaceState({}, "", url.toString());
-            // Fetch all service types on page load
-            getUserData().then((res) => {
-                sessionStorage.setItem("email", res.data.user.email);
-                sessionStorage.setItem("role", res.data.user.role);
-                sessionStorage.setItem("firstName", res.data.user.firstName);
-                sessionStorage.setItem("lastName", res.data.user.lastName);
-                sessionStorage.setItem("id", res.data.user._id);
-                if (res.data.user.role === 'customer') {
-                    navigate(routes.CUSTOMER_HOME, { replace: true });
-                } else {
-                    navigate(routes.SERVICE_PROVIDER_DASHBOARD, { replace: true });
-                }
-            });
+            navigate(routes.CUSTOMER_HOME, { replace: true });
         }
     }, []);
 
@@ -532,81 +512,41 @@ const Login: React.FC = () => {
                         borderRadius="6px"
                         borderColor={false ? 'red' : '#1976d2'}
                     />
-                    {!loginRequestSent ?
-                        <>
-                            <Button
-                                variant="outlined"
-                                fullWidth
-                                size="large"
-                                text="Login"
-                                onClick={() => handleEmailSignIn()}
-                                width="300px"
-                                height="38px"
-                                borderRadius="8px"
-                                borderColor="#1976d2"
-                                backgroundColor="#f0f8ff"
-                                hoverColor="#e6f3ff"
-                                sx={{ mt: 2, mb: 1 }}
-                            />
 
-                            <Divider>or</Divider>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        size="large"
+                        text="Login"
+                        onClick={() => handleEmailSignIn()}
+                        width="300px"
+                        height="38px"
+                        borderRadius="8px"
+                        borderColor="#1976d2"
+                        backgroundColor="#f0f8ff"
+                        hoverColor="#e6f3ff"
+                        sx={{ mt: 2, mb: 1 }}
+                    />
 
-                            {/* Social Login Buttons */}
-                            <Box sx={{ mt: 2 }}>
-                                <Button
-                                    variant="outlined"
-                                    color="inherit"
-                                    startIcon={<img src={googleLogin} alt="google" />}
-                                    text="Continue with Google"
-                                    onClick={handleGoogleLogin}
-                                    width="300px"
-                                    height="38px"
-                                    borderRadius="8px"
-                                    borderColor="#4285F4"
-                                    backgroundColor="#ffffff"
-                                    hoverColor="#f8f8f8"
-                                    sx={{ mb: 2 }}
-                                />
-                            </Box>
-                        </>
-                        :
-                        <Grid item xs={12} m={'20px 0px'} maxHeight="32px">
-                            <Box>
-                                <Typography
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                    variant="h5"
-                                    sx={{
-                                        height: '32px',
-                                        '@media (max-width: 430px)': {
-                                            height: '40px'
-                                        }
-                                    }}
-                                >
-                                    Did&apos;t receive the link?
-                                    <Typography
-                                        component="div"
-                                        sx={{
-                                            paddingLeft: '8px',
-                                            color: '#6473FF',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            fontSize: '14px',
-                                            '&:hover': {
-                                                textDecoration: 'underline'
-                                            }
-                                        }}
-                                        onClick={() => handleEmailSignIn()}
-                                    >
-                                        Resend
-                                        <Icon rowType="experimentRow" src={ArrowRightIcon} alt="ArrowRightIcon" />
-                                    </Typography>
-                                </Typography>
-                            </Box>
-                        </Grid>
-                    }
+                    <Divider>or</Divider>
+
+                    {/* Social Login Buttons */}
+                    <Box sx={{ mt: 2 }}>
+                        <Button
+                            variant="outlined"
+                            color="inherit"
+                            startIcon={<img src={googleLogin} alt="google" />}
+                            text="Continue with Google"
+                            onClick={handleGoogleLogin}
+                            width="300px"
+                            height="38px"
+                            borderRadius="8px"
+                            borderColor="#4285F4"
+                            backgroundColor="#ffffff"
+                            hoverColor="#f8f8f8"
+                            sx={{ mb: 2 }}
+                        />
+                    </Box>
                 </Box>
                 <Grid item xs={12} mb={'42px'} maxHeight="32px">
                     <Box>
@@ -614,7 +554,7 @@ const Login: React.FC = () => {
                             display="flex"
                             alignItems="center"
                             justifyContent="center"
-                            variant="h5"
+                            variant="h2"
                             sx={{
                                 height: '32px',
                                 '@media (max-width: 430px)': {
@@ -654,7 +594,7 @@ const Login: React.FC = () => {
                             display="flex"
                             alignItems="center"
                             justifyContent="flex-end"
-                            variant="h5"
+                            variant="h2"
                             sx={{
                                 height: '32px',
                                 '@media (max-width: 430px)': {
@@ -679,10 +619,8 @@ const Login: React.FC = () => {
                                     setFirstName('');
                                     setLastName('');
                                     if (mode === 'customer') {
-                                        setLoginRequestSent(false);
                                         setMode('partner');
                                     } else {
-                                        setLoginRequestSent(false);
                                         setMode('customer');
                                     }
                                 }}
