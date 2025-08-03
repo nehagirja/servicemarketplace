@@ -39,7 +39,7 @@ export const login = async (req, res) => {
         if (!existingUser) {
             return setNotFound(new Error("Email doesn't exist"), res);
         }
-        const magicLink = await authService.generateMagicLink2(existingUser, req); 
+        const magicLink = await authService.generateMagicLink2(existingUser);
         setSuccess(magicLink, null, res);
     } catch (error) {
         setError(error, res);
