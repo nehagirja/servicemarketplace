@@ -70,8 +70,14 @@ const SignupPage: React.FC = () => {
             getUserData().then((res) => {
                 sessionStorage.setItem("email", res.data.user.email);
                 sessionStorage.setItem("role", res.data.user.role);
+                sessionStorage.setItem("firstName", res.data.user.firstName);
+                sessionStorage.setItem("lastName", res.data.user.lastName);
                 sessionStorage.setItem("id", res.data.user._id);
-                navigate(routes.CUSTOMER_HOME, { replace: true });
+                if (res.data.user.role === 'customer') {
+                    navigate(routes.CUSTOMER_HOME, { replace: true });
+                } else {
+                    navigate(routes.SERVICE_PROVIDER_DASHBOARD, { replace: true });
+                }
             });
         }
     }, []);
@@ -224,24 +230,28 @@ const Register: React.FC = () => {
         };
     }, [handleRegister]);
 
-    React.useEffect(() => {
-        // Get the current URL
-        const url = new URL(window.location.href);
+    // React.useEffect(() => {
+    //     // Get the current URL
+    //     const url = new URL(window.location.href);
 
-        // Extract the `token` parameter
-        const token = url.searchParams.get("token");
+    //     // Extract the `token` parameter
+    //     const token = url.searchParams.get("token");
 
-        if (token) {
-            // Store the token in localStorage
-            localStorage.setItem("AUTH_ACCESS_TOKEN", token);
+    //     if (token) {
+    //         // Store the token in localStorage
+    //         localStorage.setItem("AUTH_ACCESS_TOKEN", token);
 
-            // Remove the token from the URL
-            url.searchParams.delete("token");
-            window.history.replaceState({}, "", url.toString());
-            navigate(routes.CUSTOMER_HOME, { replace: true });
-            console.log("Token stored and removed from URL");
-        }
-    }, []);
+    //         // Remove the token from the URL
+    //         url.searchParams.delete("token");
+    //         window.history.replaceState({}, "", url.toString());
+    //         if (mode === 'customer') {
+    //             navigate(routes.CUSTOMER_HOME, { replace: true });
+    //         } else {
+    //             navigate(routes.SERVICE_PROVIDER_DASHBOARD, { replace: true });
+    //         }
+    //         console.log("Token stored and removed from URL");
+    //     }
+    // }, []);
 
     return (
         <React.Fragment>
@@ -470,12 +480,25 @@ const Login: React.FC = () => {
 
         if (token) {
             // Store the token in localStorage
+            
             localStorage.setItem("AUTH_ACCESS_TOKEN", token);
-
-            // Remove the token from the URL
+            
             url.searchParams.delete("token");
+            
             window.history.replaceState({}, "", url.toString());
-            navigate(routes.CUSTOMER_HOME, { replace: true });
+            // Fetch all service types on page load
+            getUserData().then((res) => {
+                sessionStorage.setItem("email", res.data.user.email);
+                sessionStorage.setItem("role", res.data.user.role);
+                sessionStorage.setItem("firstName", res.data.user.firstName);
+                sessionStorage.setItem("lastName", res.data.user.lastName);
+                sessionStorage.setItem("id", res.data.user._id);
+                if (res.data.user.role === 'customer') {
+                    navigate(routes.CUSTOMER_HOME, { replace: true });
+                } else {
+                    navigate(routes.SERVICE_PROVIDER_DASHBOARD, { replace: true });
+                }
+            });
         }
     }, []);
 
@@ -552,41 +575,41 @@ const Login: React.FC = () => {
                         </>
                         :
                         <Grid item xs={12} m={'20px 0px'} maxHeight="32px">
-                    <Box>
-                        <Typography
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            variant="h2"
-                            sx={{
-                                height: '32px',
-                                '@media (max-width: 430px)': {
-                                    height: '40px'
-                                }
-                            }}
-                        >
-                            Did&apos;t receive the link?
-                            <Typography
-                                component="div"
-                                sx={{
-                                    paddingLeft: '8px',
-                                    color: '#6473FF',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    fontSize: '14px',
-                                    '&:hover': {
-                                        textDecoration: 'underline'
-                                    }
-                                }}
-                                onClick={() => handleEmailSignIn()}
-                            >
-                                Resend
-                                <Icon rowType="experimentRow" src={ArrowRightIcon} alt="ArrowRightIcon" />
-                            </Typography>
-                        </Typography>
-                    </Box>
-                </Grid>
+                            <Box>
+                                <Typography
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    variant="h2"
+                                    sx={{
+                                        height: '32px',
+                                        '@media (max-width: 430px)': {
+                                            height: '40px'
+                                        }
+                                    }}
+                                >
+                                    Did&apos;t receive the link?
+                                    <Typography
+                                        component="div"
+                                        sx={{
+                                            paddingLeft: '8px',
+                                            color: '#6473FF',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            fontSize: '14px',
+                                            '&:hover': {
+                                                textDecoration: 'underline'
+                                            }
+                                        }}
+                                        onClick={() => handleEmailSignIn()}
+                                    >
+                                        Resend
+                                        <Icon rowType="experimentRow" src={ArrowRightIcon} alt="ArrowRightIcon" />
+                                    </Typography>
+                                </Typography>
+                            </Box>
+                        </Grid>
                     }
                 </Box>
                 <Grid item xs={12} mb={'42px'} maxHeight="32px">
