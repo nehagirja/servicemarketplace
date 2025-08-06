@@ -1,0 +1,87 @@
+/* Grid container styling */
+.grid-container {
+    height: 100%; /* Full viewport height */
+    display: flex;
+  }
+  
+  /* Grid item for xs=4 */
+  .grid-item-4 {
+    height: 100%; /* Full height */
+    background-color: #d3d9e4; /* Default background */
+    color: white;
+  }
+  
+  @media (min-width: 600px) {
+    .grid-item-4 {
+      background-color: #d3d9e4; /* Background for small screens */
+    }
+  }
+  
+  @media (min-width: 960px) {
+    .grid-item-4 {
+      background-color: #d3d9e4; /* Background for medium screens */
+    }
+  }
+  
+  /* Grid item for xs=8 */
+  .grid-item-8 {
+    height: 100%; /* Full height */
+    background-color: #FCFCFC; /* Default background */
+    color: white;
+  }
+  
+  @media (min-width: 600px) {
+    .grid-item-8 {
+      background-color: #FCFCFC; /* Background for small screens */
+    }
+  }
+  
+  @media (min-width: 960px) {
+    .grid-item-8 {
+      background-color: #FCFCFC; /* Background for medium screens */
+    }
+  }
+
+  /* Paper container styling */
+.paper-container {
+  margin-top: 120px;
+  width: 80%;
+  padding: 10px;
+  margin: 40px;
+  background-color: #d3d9e4 !important;
+  color: #fff !important;
+}
+
+/* Section header styling */
+.section-header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* Bold text styling */
+.bold-text {
+  font-weight: bold;
+}
+
+/* Text alignment classes */
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.payment-info{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90.8vh;
+}
+
+.booking-info{
+  margin-top: 80px ;
+  color: black;
+}
