@@ -6,6 +6,7 @@ import {
     Grid,
     Typography,
 } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/button/index';
 import Textfield from '../../components/textfield';
@@ -173,7 +174,7 @@ const Register: React.FC = () => {
     const loginContext = useContext(LoginContext);
     const { email, setEmail, firstName, setFirstName, lastName, setLastName, setOpenSnackbar, setSnackbarMessage, setRegisterMode, mode, setMode } = loginContext;
     const navigate = useNavigate();
-
+    const { t } = useTranslation();
     const validateEmail = (email: string): boolean => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
@@ -263,10 +264,10 @@ const Register: React.FC = () => {
                 }}
             >
                 <Typography variant="h4" fontWeight="bold" gutterBottom>
-                    Welcome!
+                    {t('Welcome!')}
                 </Typography>
                 <Typography color="textSecondary" sx={{ mb: 3 }}>
-                    Create your account
+                    {t('Create your account')}
                 </Typography>
 
                 <Box style={{
