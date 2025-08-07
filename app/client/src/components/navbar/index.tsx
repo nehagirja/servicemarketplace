@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Button, Menu, MenuItem, Avatar, Tooltip, Container } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from '../../utils/languageSwitcher.tsx';
 import appLogo from '../../assets/logo.png';
 import routes from '../../constants/routes.json';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 const pages = [
   { name: 'Services', route: routes.SERVICES },
@@ -57,12 +59,12 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 ,cursor:'pointer' }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 ,cursor:'pointer' }} onClick={() => navigate(routes.CUSTOMER_HOME)}>
             <img
               src={appLogo}
               alt="App Logo"
               style={{ height: '70px', cursor: 'pointer' }}
-              onClick={() => navigate(routes.CUSTOMER_HOME)}
+              
             />
           </Box>
 
@@ -105,12 +107,11 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
-            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', mr: 2, cursor:'pointer' }}>
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', mr: 2, cursor:'pointer' }}  onClick={() => navigate(routes.CUSTOMER_HOME)}>
               <img
                 src={appLogo}
                 alt="App Logo"
                 style={{ height: '70px', cursor: 'pointer' }}
-                onClick={() => navigate(routes.CUSTOMER_HOME)}
               />
             </Box>
             <Menu
