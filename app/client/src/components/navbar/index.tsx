@@ -3,17 +3,14 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Button, Menu, MenuItem, A
 import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../../utils/languageSwitcher.tsx';
 import appLogo from '../../assets/logo.png';
 import routes from '../../constants/routes.json';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
-const pages = [
-  { name: 'Services', route: routes.SERVICES },
-  { name: 'Bookings', route: routes.BOOKINGS },
-  { name: 'Profile', route: routes.PROFILE },
-];
+
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -44,9 +41,16 @@ function ResponsiveAppBar() {
     }
   };
 
+  const { t } = useTranslation();
   // Retrieve user info from sessionStorage/localStorage
   const firstname = sessionStorage.getItem('firstName') || 'User';
   const lastname = sessionStorage.getItem('lastName') || '';
+
+  const pages = [
+    { name: t('Services'), route: routes.SERVICES },
+    { name: t('Bookings'), route: routes.BOOKINGS },
+    { name: t('Profile'), route: routes.PROFILE },
+  ];
 
   // Generate initials from firstname and lastname
   const userInitials = `${firstname[0] || ''}${lastname[0] || ''}`.toUpperCase();
@@ -78,7 +82,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: '#283593' }}>
+    <AppBar position="sticky" sx={{ backgroundColor: '#09285c' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo */}
