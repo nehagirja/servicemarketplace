@@ -12,7 +12,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { setBookingDetails } from '../../store/customerBookingSlice.ts';
 import CustomisedSnackbar from '../../components/snackbar';
-// import { MenuItem } from "@mui/material";
 import axios from "axios";
 
 /* 
