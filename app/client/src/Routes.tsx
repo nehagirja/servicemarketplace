@@ -5,8 +5,6 @@ import Login from "./pages/authentication/login.tsx";
 import Services from "./pages/customers/services.tsx";
 import ServiceProviderHome from "./pages/serviceProviders/dashboard.tsx";
 import BookingDetailsPage from "./pages/serviceProviders/BookingDetails.tsx";
-// import ServiceProviderDashboard from "./pages/serviceProviders/dashboard";
-// import BookingProvider from "./pages/serviceProviders/bookings.tsx";
 import NotFound from "./pages/pageNotFound/index.tsx";
 import ProfilePage from "./pages/customers/profile.tsx"
 import PartnerBooking from "./pages/customers/partnerbooking";
